@@ -1,4 +1,6 @@
-﻿using Ecom.API.Errors;
+﻿using AutoMapper;
+using Ecom.API.Errors;
+using Ecom.Core.Dtos;
 using Ecom.Core.Entites;
 using Ecom.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +12,11 @@ namespace Ecom.API.Controllers
     public class BasketController : ControllerBase
     {
         private readonly IUnitOfWork _uOW;
-        public BasketController(IUnitOfWork UOW) 
+        private readonly IMapper _mapper;
+        public BasketController(IUnitOfWork UOW, IMapper mapper) 
         {
             _uOW = UOW;
+            _mapper = mapper;
         }
         [HttpGet("get-basket-item/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -37,13 +41,14 @@ namespace Ecom.API.Controllers
         [HttpPost("update-basket")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BaseCommonResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> UpdateBasket(CustomerBasket customerBasket)
+        public async Task<ActionResult> UpdateBasket(CustomerBasketDto customerBasket)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var _basket = await _uOW.BasketRepository.UpdateBasketAsync(customerBasket);
+                    var result =_mapper.Map<CustomerBasketDto>(customerBasket);
+                    var _basket = await _uOW.BasketRepository.UpdateBasketAsync(result);
                     if (_basket is not null)
                     {
                         return Ok(customerBasket);

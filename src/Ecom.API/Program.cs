@@ -1,9 +1,12 @@
 using Ecom.API.Errors;
 using Ecom.API.Extension;
 using Ecom.API.Middleware;
+using Ecom.Core.Interfaces;
 using Ecom.Infrastructure;
+using Ecom.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System.Reflection;
 
@@ -56,8 +59,12 @@ app.UseStaticFiles();
 
 app.UseCors("CorsPolicy");
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
+
+InfrastructureRegistration.InfrastuctionConfigMiddleware(app);
 
 app.Run();

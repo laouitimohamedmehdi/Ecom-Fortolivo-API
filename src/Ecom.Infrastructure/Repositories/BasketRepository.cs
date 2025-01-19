@@ -1,4 +1,6 @@
-﻿using Ecom.Core.Entites;
+﻿using AutoMapper;
+using Ecom.Core.Dtos;
+using Ecom.Core.Entites;
 using Ecom.Core.Interfaces;
 using StackExchange.Redis;
 using System;
@@ -13,9 +15,11 @@ namespace Ecom.Infrastructure.Repositories
     public class BasketRepository : IBasketRepository
     {
         private readonly IDatabase _database;
-        public BasketRepository(IConnectionMultiplexer redis)
+        private readonly IMapper _mapper;
+        public BasketRepository(IConnectionMultiplexer redis, IMapper mapper)
         {
             _database = redis.GetDatabase();
+            _mapper = mapper;
         }
 
         public async Task<bool> DeleteBasketAsync(string basketId)
@@ -30,7 +34,7 @@ namespace Ecom.Infrastructure.Repositories
             return data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<CustomerBasket>(data);
         }
 
-        public async Task<CustomerBasket> UpdateBasketAsync(CustomerBasket customerBasket)
+        public async Task<CustomerBasket> UpdateBasketAsync(CustomerBasketDto customerBasket)
         {
             var _basket = await _database.StringSetAsync(customerBasket.Id, JsonSerializer.Serialize(customerBasket),TimeSpan.FromDays(30));
             return !_basket ? null : await GetBasketAsync(customerBasket.Id);
