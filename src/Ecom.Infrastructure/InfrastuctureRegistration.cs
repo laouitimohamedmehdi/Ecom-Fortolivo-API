@@ -1,5 +1,6 @@
 ﻿using Ecom.Core.Entites;
 using Ecom.Core.Interfaces;
+using Ecom.Core.Services;
 using Ecom.Infrastructure.Data;
 using Ecom.Infrastructure.Data.Config;
 using Ecom.Infrastructure.Repositories;
