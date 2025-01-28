@@ -39,7 +39,7 @@ namespace Ecom.API.Controllers
         }
 
         [HttpGet("Get-Delivery-Methods")]
-        public async Task<IActionResult> GetDeliveryMethods()
+        public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethods()
         {
             var deliveryMethods = await _orderService.GetDeliveryMethodsAsync();
             if (deliveryMethods is null) return BadRequest(new BaseCommonResponse(400, "Error in Delivery Methods"));

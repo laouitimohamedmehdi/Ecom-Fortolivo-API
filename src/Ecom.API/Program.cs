@@ -10,6 +10,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +60,14 @@ builder.Services.AddCors(options =>
 
 //configure order services
 builder.Services.AddScoped<IOrderServices, OrderServices>();
+
+// Add services to the container
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
 
 var app = builder.Build();
 

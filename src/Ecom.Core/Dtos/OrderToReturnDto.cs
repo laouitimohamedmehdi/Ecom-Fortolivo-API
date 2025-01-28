@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Ecom.Core.Dtos
@@ -18,6 +19,7 @@ namespace Ecom.Core.Dtos
         public IReadOnlyList<OrderItemDto> OrderItems { get; set; }
         public decimal SubTotal { get; set; }
         public decimal Total { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public OrderStatus OrderStatus { get; set; }
     }
 }
